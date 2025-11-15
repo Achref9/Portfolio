@@ -96,11 +96,24 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-bounce" />
-        </div>
-      </div>
+<div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+  <div className="flex flex-col items-center">
+    <span className="text-primary animate-bounce">
+      {/* Down arrow icon (Phosphor or any icon lib) */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-6 h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
+    </span>
+  </div>
+</div>
+
     </section>
   );
 };

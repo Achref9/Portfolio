@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { GithubLogo, LinkedinLogo, EnvelopeSimple } from '@phosphor-icons/react';
-import { toast } from 'sonner';
+import {
+  GithubLogo,
+  LinkedinLogo,
+  EnvelopeSimple,
+  CopySimple,
+  Check,
+} from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const iconsRef = useRef<HTMLDivElement>(null);
+  const emailBoxRef = useRef<HTMLDivElement>(null);
+  const copyBtnRef = useRef<HTMLButtonElement>(null);
+  const starsContainerRef = useRef<HTMLDivElement>(null);
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -30,157 +30,135 @@ const Contact = () => {
         },
       });
 
-      tl.fromTo(
-        titleRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
-      )
-      .fromTo(
-        formRef.current?.querySelectorAll('.form-input') || [],
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power2.out',
-        },
-        '-=0.4'
-      )
-      .fromTo(
-        iconsRef.current?.children || [],
-        { opacity: 0, scale: 0.5 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: 'back.out(1.7)',
-        },
-        '-=0.4'
-      );
+      tl.fromTo(titleRef.current, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(emailBoxRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+        .fromTo(iconsRef.current?.children || [], { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, stagger: 0.1 }, '-=0.4');
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Simulate form submission
-    toast.success('Message sent successfully! I\'ll get back to you soon.');
-    
-    setFormData({
-      name: '',
-      email: '',
-      message: '',
-    });
+  const handleCopy = () => {
+    navigator.clipboard.writeText('abidi.achref030@gmail.com');
+    setCopied(true);
+
+    if (copyBtnRef.current) {
+      gsap.fromTo(copyBtnRef.current, { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1 });
+    }
+
+    setTimeout(() => setCopied(false), 2000); // reset after 2s
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // Shooting stars logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!starsContainerRef.current) return;
+
+      const star = document.createElement('div');
+      star.className = 'absolute w-1 h-1 bg-white rounded-full';
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 50}%`;
+
+      // Tail effect
+      star.style.boxShadow = '0 0 6px 2px rgba(255,255,255,0.8)';
+      star.style.background =
+        'linear-gradient(90deg, white, rgba(255,255,255,0))';
+
+      starsContainerRef.current.appendChild(star);
+
+      gsap.to(star, {
+        x: 250,
+        y: 120,
+        opacity: 0,
+        duration: 1.8,
+        ease: 'power2.out',
+        onComplete: () => {
+          star.remove();
+        },
+      });
+    }, 4000); // every 4 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section id="contact" ref={sectionRef} className="py-32 relative">
-      <div className="container mx-auto px-6">
-        <h2 ref={titleRef} className="text-4xl md:text-5xl font-light mb-16 text-center">
+      <div className="container mx-auto px-6 text-center">
+        <h2 ref={titleRef} className="text-4xl md:text-5xl font-light mb-16">
           Get In <span className="text-gradient">Touch</span>
         </h2>
 
-        <div className="max-w-2xl mx-auto">
-          {/* Contact Form */}
-          <form ref={formRef} onSubmit={handleSubmit} className="glass rounded-2xl p-8 mb-12">
-            <div className="form-input mb-6">
-              <label htmlFor="name" className="block text-sm text-muted-foreground mb-2">
-                Name
-              </label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="bg-muted/50 border-border/50 focus:border-primary focus:ring-primary focus:glow transition-all"
-                placeholder="Your name"
-              />
-            </div>
-
-            <div className="form-input mb-6">
-              <label htmlFor="email" className="block text-sm text-muted-foreground mb-2">
-                Email
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="bg-muted/50 border-border/50 focus:border-primary focus:ring-primary focus:glow transition-all"
-                placeholder="your.email@example.com"
-              />
-            </div>
-
-            <div className="form-input mb-8">
-              <label htmlFor="message" className="block text-sm text-muted-foreground mb-2">
-                Message
-              </label>
-              <Textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={6}
-                className="bg-muted/50 border-border/50 focus:border-primary focus:ring-primary focus:glow transition-all resize-none"
-                placeholder="Tell me about your project..."
-              />
-            </div>
-
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow hover:glow-lg hover:scale-105 transition-all duration-300"
-            >
-              Send Message
-            </Button>
-          </form>
-
-          {/* Social Links */}
-          <div ref={iconsRef} className="flex justify-center gap-6">
-            <a
-              href="https://github.com/Achref9"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass w-14 h-14 rounded-full flex items-center justify-center hover:glow hover:scale-110 transition-all duration-300 group"
-            >
-              <GithubLogo size={24} weight="light" className="text-muted-foreground group-hover:text-primary transition-colors" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/achref-abidi-/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass w-14 h-14 rounded-full flex items-center justify-center hover:glow hover:scale-110 transition-all duration-300 group"
-            >
-              <LinkedinLogo size={24} weight="light" className="text-muted-foreground group-hover:text-primary transition-colors" />
-            </a>
+        {/* Email Box */}
+        <div className="relative mb-12 flex justify-center">
+          <div
+            ref={emailBoxRef}
+            className="glass max-w-xl mx-auto rounded-2xl p-8 flex items-center justify-center gap-4 text-lg text-muted-foreground relative z-10"
+          >
+            <EnvelopeSimple size={24} weight="light" className="text-primary" />
             <a
               href="mailto:abidi.achref030@gmail.com"
-              className="glass w-14 h-14 rounded-full flex items-center justify-center hover:glow hover:scale-110 transition-all duration-300 group"
+              className="hover:text-primary transition-colors"
             >
-              <EnvelopeSimple size={24} weight="light" className="text-muted-foreground group-hover:text-primary transition-colors" />
+              abidi.achref030@gmail.com
             </a>
+            {/* Copy Button */}
+            <button
+              ref={copyBtnRef}
+              onClick={handleCopy}
+              className="ml-2 p-2 rounded-full hover:bg-primary/20 transition-colors"
+              aria-label="Copy email"
+            >
+              {copied ? (
+                <Check
+                  size={20}
+                  weight="light"
+                  className="text-green-500 transition-colors"
+                />
+              ) : (
+                <CopySimple
+                  size={20}
+                  weight="light"
+                  className="text-muted-foreground hover:text-primary"
+                />
+              )}
+            </button>
           </div>
+        </div>
+
+        {/* Social Links */}
+        <div ref={iconsRef} className="flex justify-center gap-6">
+          <a
+            href="https://github.com/Achref9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 group"
+          >
+            <GithubLogo
+              size={24}
+              weight="light"
+              className="text-muted-foreground group-hover:text-primary transition-colors"
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/achref-abidi-/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 group"
+          >
+            <LinkedinLogo
+              size={24}
+              weight="light"
+              className="text-muted-foreground group-hover:text-primary transition-colors"
+            />
+          </a>
         </div>
       </div>
 
-      {/* Background Particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Background Particles + Shooting Stars */}
+      <div
+        ref={starsContainerRef}
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+      >
         {[...Array(15)].map((_, i) => (
           <div
             key={i}
