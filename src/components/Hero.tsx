@@ -107,7 +107,7 @@ const Hero = () => {
               asChild
               className="group border-primary/30 bg-background/10 backdrop-blur-sm hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
             >
-              <a href="/AchrefAbidi-Resume-EN.pdf" download>
+            <a href="/portfolio/AchrefAbidi-Resume-EN.pdf" download>
                 <DownloadSimple className="mr-2 group-hover:translate-y-0.5 transition-transform" size={18} />
                 CV English
               </a>
@@ -119,7 +119,7 @@ const Hero = () => {
               asChild
               className="group border-primary/30 bg-background/10 backdrop-blur-sm hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
             >
-              <a href="/AchrefAbidi-Resume-FR.pdf" download>
+<a href="/portfolio/AchrefAbidi-Resume-FR.pdf" download>
                 <DownloadSimple className="mr-2 group-hover:translate-y-0.5 transition-transform" size={18} />
                 CV Français
               </a>
