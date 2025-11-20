@@ -7,6 +7,7 @@ import {
   EnvelopeSimple,
   CopySimple,
   Check,
+  Phone
 } from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,10 +17,12 @@ const Contact = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const iconsRef = useRef<HTMLDivElement>(null);
   const emailBoxRef = useRef<HTMLDivElement>(null);
-  const copyBtnRef = useRef<HTMLButtonElement>(null);
+  const copyEmailBtnRef = useRef<HTMLButtonElement>(null);
+  const copyPhoneBtnRef = useRef<HTMLButtonElement>(null);
   const starsContainerRef = useRef<HTMLDivElement>(null);
 
-  const [copied, setCopied] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -38,18 +41,20 @@ const Contact = () => {
     return () => ctx.revert();
   }, []);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText('abidi.achref030@gmail.com');
-    setCopied(true);
+  const handleCopy = (text: string, type: 'email' | 'phone') => {
+    navigator.clipboard.writeText(text);
 
-    if (copyBtnRef.current) {
-      gsap.fromTo(copyBtnRef.current, { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1 });
+    if (type === 'email') {
+      setCopiedEmail(true);
+      gsap.fromTo(copyEmailBtnRef.current, { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1 });
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } else {
+      setCopiedPhone(true);
+      gsap.fromTo(copyPhoneBtnRef.current, { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1 });
+      setTimeout(() => setCopiedPhone(false), 2000);
     }
-
-    setTimeout(() => setCopied(false), 2000); // reset after 2s
   };
 
-  // Shooting stars logic
   useEffect(() => {
     const interval = setInterval(() => {
       if (!starsContainerRef.current) return;
@@ -58,11 +63,8 @@ const Contact = () => {
       star.className = 'absolute w-1 h-1 bg-white rounded-full';
       star.style.left = `${Math.random() * 100}%`;
       star.style.top = `${Math.random() * 50}%`;
-
-      // Tail effect
       star.style.boxShadow = '0 0 6px 2px rgba(255,255,255,0.8)';
-      star.style.background =
-        'linear-gradient(90deg, white, rgba(255,255,255,0))';
+      star.style.background = 'linear-gradient(90deg, white, rgba(255,255,255,0))';
 
       starsContainerRef.current.appendChild(star);
 
@@ -72,11 +74,9 @@ const Contact = () => {
         opacity: 0,
         duration: 1.8,
         ease: 'power2.out',
-        onComplete: () => {
-          star.remove();
-        },
+        onComplete: () => star.remove(),
       });
-    }, 4000); // every 4 seconds
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -88,40 +88,51 @@ const Contact = () => {
           Get In <span className="text-gradient">Touch</span>
         </h2>
 
-        {/* Email Box */}
+        {/* Email + Phone Box */}
         <div className="relative mb-12 flex justify-center">
           <div
             ref={emailBoxRef}
-            className="glass max-w-xl mx-auto rounded-2xl p-8 flex items-center justify-center gap-4 text-lg text-muted-foreground relative z-10"
+            className="glass max-w-xl mx-auto rounded-2xl p-8 flex flex-col items-center gap-5 text-lg text-muted-foreground relative z-10"
           >
-            <EnvelopeSimple size={24} weight="light" className="text-primary" />
-            <a
-              href="mailto:abidi.achref030@gmail.com"
-              className="hover:text-primary transition-colors"
-            >
-              abidi.achref030@gmail.com
-            </a>
-            {/* Copy Button */}
-            <button
-              ref={copyBtnRef}
-              onClick={handleCopy}
-              className="ml-2 p-2 rounded-full hover:bg-primary/20 transition-colors"
-              aria-label="Copy email"
-            >
-              {copied ? (
-                <Check
-                  size={20}
-                  weight="light"
-                  className="text-green-500 transition-colors"
-                />
-              ) : (
-                <CopySimple
-                  size={20}
-                  weight="light"
-                  className="text-muted-foreground hover:text-primary"
-                />
-              )}
-            </button>
+            {/* EMAIL */}
+            <div className="flex items-center gap-4">
+              <EnvelopeSimple size={24} weight="light" className="text-primary" />
+              <a href="mailto:abidi.achref030@gmail.com" className="hover:text-primary transition-colors">
+                abidi.achref030@gmail.com
+              </a>
+              <button
+                ref={copyEmailBtnRef}
+                onClick={() => handleCopy('abidi.achref030@gmail.com', 'email')}
+                className="ml-2 p-2 rounded-full hover:bg-primary/20 transition-colors"
+                aria-label="Copy email"
+              >
+                {copiedEmail ? (
+                  <Check size={20} weight="light" className="text-green-500" />
+                ) : (
+                  <CopySimple size={20} weight="light" className="text-muted-foreground hover:text-primary" />
+                )}
+              </button>
+            </div>
+
+            {/* PHONE */}
+            <div className="flex items-center gap-4">
+              <Phone size={24} weight="light" className="text-primary" />
+              <a href="tel:+21693020718" className="hover:text-primary transition-colors">
+                +216 93 020 718
+              </a>
+              <button
+                ref={copyPhoneBtnRef}
+                onClick={() => handleCopy('+21693020718', 'phone')}
+                className="ml-2 p-2 rounded-full hover:bg-primary/20 transition-colors"
+                aria-label="Copy phone"
+              >
+                {copiedPhone ? (
+                  <Check size={20} weight="light" className="text-green-500" />
+                ) : (
+                  <CopySimple size={20} weight="light" className="text-muted-foreground hover:text-primary" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -133,28 +144,20 @@ const Contact = () => {
             rel="noopener noreferrer"
             className="glass w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 group"
           >
-            <GithubLogo
-              size={24}
-              weight="light"
-              className="text-muted-foreground group-hover:text-primary transition-colors"
-            />
+            <GithubLogo size={24} weight="light" className="text-muted-foreground group-hover:text-primary" />
           </a>
+
           <a
             href="https://www.linkedin.com/in/achref-abidi-/"
             target="_blank"
             rel="noopener noreferrer"
             className="glass w-14 h-14 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300 group"
           >
-            <LinkedinLogo
-              size={24}
-              weight="light"
-              className="text-muted-foreground group-hover:text-primary transition-colors"
-            />
+            <LinkedinLogo size={24} weight="light" className="text-muted-foreground group-hover:text-primary" />
           </a>
         </div>
       </div>
 
-      {/* Background Particles + Shooting Stars */}
       <div
         ref={starsContainerRef}
         className="absolute inset-0 pointer-events-none overflow-hidden"
