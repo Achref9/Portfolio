@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, CalendarBlank, MapPin } from '@phosphor-icons/react';
+import isammLogo from '@/assets/isamm-logo.png';
+import isetLogo from '@/assets/iset-logo.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +15,7 @@ const educationData = [
     period: '2023 - Present',
     status: 'Expected graduation: June 2026',
     current: true,
+    logo: isammLogo,
   },
   {
     degree: 'Bachelor of Information Technology',
@@ -22,6 +25,7 @@ const educationData = [
     period: '2023',
     status: 'Graduated',
     current: false,
+    logo: isetLogo,
   },
   {
     degree: 'Baccalaureate of Experimental Science',
@@ -83,11 +87,19 @@ const Education = () => {
                     ? 'bg-primary/20 group-hover:bg-primary/30' 
                     : 'bg-primary/10 group-hover:bg-primary/20'
                 }`}>
-                  <GraduationCap 
-                    size={32} 
-                    weight="light" 
-                    className={edu.current ? 'text-primary' : 'text-primary/70'} 
-                  />
+                  {edu.logo ? (
+                    <img 
+                      src={edu.logo} 
+                      alt={edu.institution}
+                      className="w-12 h-12 object-contain"
+                    />
+                  ) : (
+                    <GraduationCap 
+                      size={32} 
+                      weight="light" 
+                      className={edu.current ? 'text-primary' : 'text-primary/70'} 
+                    />
+                  )}
                 </div>
                 
                 <div className="flex-1">

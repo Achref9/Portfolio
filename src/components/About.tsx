@@ -2,28 +2,26 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import profileImage from '@/assets/profile.png';
-import { 
-  Code, 
-  Database, 
-  DeviceMobile, 
-  Cpu,
-  Brain,
-  Cube,
-  GitBranch,
-  Globe
-} from '@phosphor-icons/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const skills = [
-  { name: 'Full-Stack Dev', icon: Code },
-  { name: 'Databases', icon: Database },
-  { name: 'Mobile Apps', icon: DeviceMobile },
-  { name: 'AI/ML/NLP', icon: Brain },
-  { name: 'Cloud & DevOps', icon: Cpu },
-  { name: '3D/VR/Unity', icon: Cube },
-  { name: 'Git & GitHub', icon: GitBranch },
-  { name: 'Web Frameworks', icon: Globe },
+  { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+  { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+  { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+  { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+  { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+  { name: 'Unity', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg' },
+  { name: 'Flutter', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg' },
+  { name: 'MongoDB', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
+  { name: 'Firebase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg' },
+  { name: 'TensorFlow', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg' },
+  { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
+  { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+  { name: 'C++', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
+  { name: 'C#', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg' },
+  { name: 'Java', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+  { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
 ];
 
 const About = () => {
@@ -113,10 +111,10 @@ const About = () => {
                   key={skill.name}
                   className="glass rounded-xl p-4 flex flex-col items-center justify-center gap-3 hover:glow hover:scale-105 transition-all duration-300 cursor-pointer group"
                 >
-                  <skill.icon 
-                    size={32} 
-                    weight="light"
-                    className="text-primary group-hover:text-accent transition-colors" 
+                  <img 
+                    src={skill.logo}
+                    alt={skill.name}
+                    className="w-8 h-8 group-hover:scale-110 transition-transform"
                   />
                   <span className="text-xs text-center text-muted-foreground group-hover:text-foreground transition-colors">
                     {skill.name}
